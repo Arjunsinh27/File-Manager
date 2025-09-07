@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure File Manager</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-cloud"></i> Azure File Manager</h1>
+            <p>Secure cloud file storage powered by Azure Blob Storage</p>
+        </header>
+
+        <!-- Upload Section -->
+        <section class="upload-section">
+            <div class="upload-card">
+                <h2><i class="fas fa-upload"></i> Upload Files</h2>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <p class="upload-text">Drag and drop files here or click to browse</p>
+                        <p class="upload-subtext">Supported: .txt, .pdf, .png, .jpg, .jpeg, .gif, .doc, .docx, .xls, .xlsx (Max: 10MB)</p>
+                        <input type="file" id="fileInput" class="file-input" accept=".txt,.pdf,.png,.jpg,.jpeg,.gif,.doc,.docx,.xls,.xlsx">
+                        <button type="button" class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                            Browse Files
+                        </button>
+                    </div>
+                </div>
+                <div class="upload-progress" id="uploadProgress" style="display: none;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <p class="progress-text" id="progressText">Uploading...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Files Section -->
+        <section class="files-section">
+            <div class="files-header">
+                <h2><i class="fas fa-folder"></i> Your Files</h2>
+                <button class="refresh-btn" onclick="loadFiles()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+            </div>
+            
+            <div class="files-container">
+                <div id="loadingSpinner" class="loading-spinner">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading files...</p>
+                </div>
+                
+                <div id="noFiles" class="no-files" style="display: none;">
+                    <i class="fas fa-folder-open"></i>
+                    <p>No files uploaded yet</p>
+                    <small>Upload your first file to get started</small>
+                </div>
+
+                <div class="files-grid" id="filesGrid" style="display: none;">
+                    <!-- Files will be populated here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Toast Notifications -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
