@@ -62,6 +62,52 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
+// Health check endpoint
+app.get('/api/health', async (req, res) => {
+    try {
+        const health = {
+            status: 'ok',
+            timestamp: new Date().toISOString(),
+            environment: {
+                nodeVersion: process.version,
+                port: port,
+                hasConnectionString: !!AZURE_STORAGE_CONNECTION_STRING,
+                containerName: CONTAINER_NAME
+            }
+        };
+
+        // Test storage connection
+        try {
+            await blobServiceClient.getProperties();
+            health.storage = {
+                connected: true,
+                message: 'Successfully connected to Azure Storage'
+            };
+            
+            // Check container
+            const containerExists = await containerClient.exists();
+            health.container = {
+                exists: containerExists,
+                name: CONTAINER_NAME
+            };
+            
+        } catch (storageError) {
+            health.storage = {
+                connected: false,
+                error: storageError.message,
+                code: storageError.code
+            };
+        }
+
+        res.json(health);
+    } catch (error) {
+        res.status(500).json({
+            status: 'error',
+            error: error.message
+        });
+    }
+});
+
 // Upload file
 app.post('/api/upload', upload.single('file'), async (req, res) => {
     try {
